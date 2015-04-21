@@ -23,27 +23,27 @@ root.code
 root.success?
 # => true
 puts root.body
-{
-    "api": {
-        "admin": "terry@virdocs.com",
-        "available_versions": [
-            {
-                "version": "v1",
-                "version_date": "2015-01-21",
-                "version_help": "/v1/describe/",
-                "version_major": 1,
-                "version_string": "1.0.3",
-                "version_url": "/v1/"
-            }
-        ],
-        "current_version": "v1",
-        "host": "planck.redshelf.com",
-        "vhost": "api.redshelf.com"
-    },
-    "code": 200,
-    "success": true,
-    "test_mode": false
-} 
+# {
+#     "api": {
+#         "admin": "terry@virdocs.com",
+#         "available_versions": [
+#             {
+#                 "version": "v1",
+#                 "version_date": "2015-01-21",
+#                 "version_help": "/v1/describe/",
+#                 "version_major": 1,
+#                 "version_string": "1.0.3",
+#                 "version_url": "/v1/"
+#             }
+#         ],
+#         "current_version": "v1",
+#         "host": "planck.redshelf.com",
+#         "vhost": "api.redshelf.com"
+#     },
+#     "code": 200,
+#     "success": true,
+#     "test_mode": false
+# } 
 ```
 
 ### Error responses
