@@ -58,7 +58,7 @@ class RedshelfApiClient
     
     def call(request)
       response = super(request)
-      class_name = url_components.last.class_name
+      class_name = url_components.last.try(:class_name) || 'Root'
 
       response_class = if ResponseClasses.const_defined?(class_name, false)
         ResponseClasses.const_get(class_name)
@@ -84,6 +84,14 @@ class RedshelfApiClient
         BuilderListResponse.new(json.map {|attrs| self.from(attrs) }, response)
       else
         self.from(json).tap {|br| br.response = response }
+      end
+    end
+    
+    def self.from(maybe_hash)
+      if maybe_hash.is_a?(Array)
+        BuilderListResponse.new(super, nil)
+      else
+        super
       end
     end
     

@@ -24,8 +24,10 @@ class RedshelfApiClient
     RedshelfApiClient::Builder.new(config[:site])
   end
   
+  ### start API METHODS ###
+  
   def index
-    builder.index.get
+    builder.get
   end
   
   def profile
@@ -48,9 +50,10 @@ class RedshelfApiClient
   end
   
   def book_search(attributes, &block)
+    search = {:isbn => Array(attributes[:isbn]), :title => attributes[:title], :author => attributes[:author]}
     iterate(block) do |limit, offset|
       response_content(
-        builder.v1.book("search").post(attributes.merge(:limit => limit, :offset => offset)),
+        builder.v1.book("search").post(search.merge(:limit => limit, :offset => offset)),
         :results
       )
     end
@@ -130,7 +133,7 @@ class RedshelfApiClient
     builder.v1.order.refund(:order_id => id, :items => items, :type => refund_type)
   end
   
-  def order_free(username, book_hash_id, attributes)
+  def order_free(username, book_hash_id, attributes = {})
     builder.v1.order.free.post(
       :username => username, 
       :hash_id => book_hash_id, 
@@ -143,10 +146,10 @@ class RedshelfApiClient
     builder.v1.order(id).usage.get
   end
   
-  def code_generation(attributes)
+  def code_generation(hash_id, count, attributes = {})
     builder.v1.codes.generate.post(
-      :hash_id => attributes[:hash_id],
-      :count => attributes[:count],
+      :hash_id => hash_id,
+      :count => count.to_i,
       :org => attributes[:org],
       :limit_days => attributes[:limit_days],
       :expiration_date => normalize_date(attributes[:expiration_date]),
@@ -158,6 +161,10 @@ class RedshelfApiClient
   def code_summary
     builder.v1.codes.summary.get
   end
+  
+  ### END API METHODS ###
+  
+  private
   
   def response_content(response, key)
     if response[key]
@@ -195,6 +202,7 @@ class RedshelfApiClient
   end
   
   def normalize_date(date)
+    return nil if date.nil? || date.blank?
     Time.parse(date.to_s).strftime("%F %T") #FIXME???
   end
 

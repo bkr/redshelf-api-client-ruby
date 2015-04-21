@@ -14,8 +14,8 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
-  gem.name = "redshelf_client"
-  gem.homepage = "http://github.com/jawheeler/redshelf_client"
+  gem.name = "redshelf-api-client-ruby"
+  gem.homepage = "http://github.com/jawheeler/redshelf-api-client-ruby"
   gem.license = "MIT"
   gem.summary = %Q{TODO: one-line summary of your gem}
   gem.description = %Q{TODO: longer description of your gem}
@@ -44,7 +44,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "redshelf_client #{version}"
+  rdoc.title = "redshelf-api-client-ruby #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
