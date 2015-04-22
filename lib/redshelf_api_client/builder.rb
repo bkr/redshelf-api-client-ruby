@@ -32,7 +32,6 @@ class RedshelfApiClient
       
       headers.each { |k, v| request.headers[k] = v }
       request.body = request_body(request)
-      request.url = "#{request.url}/"
       request
     end
     

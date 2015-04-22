@@ -50,6 +50,7 @@ class RedshelfApiClient
   end
   
   def book_search(attributes, &block)
+    raise ArgumentError.new("Must supply a block (e.g. RedshelfApiClient.new.book_search(attributes){|book| ... })") unless block_given?
     search = {:isbn => Array(attributes[:isbn]), :title => attributes[:title], :author => attributes[:author]}
     iterate(block) do |limit, offset|
       response_content(
@@ -60,6 +61,7 @@ class RedshelfApiClient
   end
   
   def book_index(&block)
+    raise ArgumentError.new("Must supply a block (e.g. RedshelfApiClient.new.book_index {|book| ... })") unless block_given?
     iterate(block) do |limit, offset|
       response = 
       response_content(
