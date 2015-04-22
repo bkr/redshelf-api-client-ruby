@@ -62,7 +62,7 @@ book.identifiers.isbn13
 ### Error responses
 In the case when the response object returns *false* for ".success?" the accessors will reflect the error response instead of the typical successful response.
 
-```
+```ruby
 book = RedshelfApiClient.new.book(:isbn => 'BAD')
 book.success?
 # => false
