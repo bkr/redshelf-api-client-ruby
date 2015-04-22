@@ -79,9 +79,9 @@ Return the API index which includes general information about the current status
 
 ```ruby
 response = RedshelfApiClient.new.index
-# => {"api"=>{"admin"=>"terry@virdocs.com", "available_versions"=>[{"version"=>"v1", "version_date"=>"2015-01-21", "version_help"=>"/v1/describe/", "version_major"=>1, "version_string"=>"1.0.3", "version_url"=>"/v1/"}], "current_version"=>"v1", "host"=>"volta.redshelf.com", "vhost"=>"api.redshelf.com"}, "code"=>200, "success"=>true, "test_mode"=>false}
+# => {"api"=>{"admin"=>"example@example.com", "available_versions"=>[{"version"=>"v1", "version_date"=>"2015-01-21", "version_help"=>"/v1/describe/", "version_major"=>1, "version_string"=>"1.0.3", "version_url"=>"/v1/"}], "current_version"=>"v1", "host"=>"volta.redshelf.com", "vhost"=>"api.redshelf.com"}, "code"=>200, "success"=>true, "test_mode"=>false}
 response.api.admin
-# => "terry@virdocs.com"
+# => "example@example.com"
 ```
 
 ### Profile
