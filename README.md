@@ -43,7 +43,20 @@ puts root.body
 #     "code": 200,
 #     "success": true,
 #     "test_mode": false
-# } 
+# }
+root.headers
+# => {:server=>"nginx", :date=>"Tue, 21 Apr 2015 22:10:48 GMT", :content_type=>"application/json", :transfer_encoding=>"chunked", :connection=>"keep-alive"}
+```
+All response objects have dynamically generated accessors that reflect the data in the JSON response. For convenience, some request methods return data from a child element instead of the full JSON for successful responses.
+
+```ruby
+book = RedshelfApiClient.new.book(:isbn => '9780321558237')
+book.class
+# => RedshelfApiClient::ResponseClasses::Book
+book.title
+# => "Campbell Biology, 9/e"
+book.identifiers.isbn13
+#  => "9780321558237"
 ```
 
 ### Error responses
@@ -57,8 +70,8 @@ book.code
 # => 404
 book.message
 # => "Book not found"
-book.author
-# NoMethodError: undefined method `author' for #<RedshelfApiClient::ResponseClasses::Book:0x007f9fb7582678>
+book.title
+# NoMethodError: undefined method `title' for #<RedshelfApiClient::ResponseClasses::Book:0x007f9fb7582678>
 ```
 
 ### Index
@@ -76,7 +89,7 @@ Return information about your account including access constraints.
 
 ```ruby
 RedshelfApiClient.new.profile
-# =>  => {"code"=>200, "profile"=>{"address_1"=>nil, "address_2"=>nil, "city"=>nil, "country"=>nil, "nickname"=>nil, "state"=>nil, "zip"=>nil}, "scopes"=>"[\"users\", \"invite_user\", \"create_user\", \"create_orders\", \"refunds\", \"bdp\", \"import\"]", "success"=>true, "test_mode"=>false, "username"=>"{username}"}
+# => {"code"=>200, "profile"=>{"address_1"=>nil, "address_2"=>nil, "city"=>nil, "country"=>nil, "nickname"=>nil, "state"=>nil, "zip"=>nil}, "scopes"=>"[\"users\", \"invite_user\", \"create_user\", \"create_orders\", \"refunds\", \"bdp\", \"import\"]", "success"=>true, "test_mode"=>false, "username"=>"{username}"}
 ```
 
 ### Book (Version 1)
@@ -110,100 +123,88 @@ Get a URL to the reader for a given user and book.
 RedshelfApiClient.new.book_viewer(username, book_hash_id)
 # => {"code"=>200, "success"=>true, "test_mode"=>true, "viewer_url"=>"https://platform.virdocs.com/viewer/..."}
 # or
-# => {"username"=>"9d4c827795ac03f45f7af8f24bf568", "code"=>404, "test_mode"=>false, "error"=>true, "message"=>"Purchase for user not found.", "hash_id"=>"8db0cf64ee1ed2069d4c0884ce8c697ca2eb0893"}
+# => {"username"=>{username}, "code"=>404, "test_mode"=>false, "error"=>true, "message"=>"Purchase for user not found.", "hash_id"=>"8db0cf64ee1ed2069d4c0884ce8c697ca2eb0893"}
 ```
   
-  def book_viewer(username, book_hash_id)
-    builder.v1.book.viewer.post(:username => username, :hash_id => book_hash_id)
-  end
-  
-  def invite_user(attributes)
-    builder.v1.user.invite.post(
-      :email => attributes[:email], 
-      :first_name => attributes[:first_name],
-      :last_name => attributes[:last_name],
-      :profile => attributes[:profile],
-      :label => attributes[:label]
-    )
-  end
-  
-  def create_user(attributes)
-    builder.v1.user.post(
-      :email => attributes[:email], 
-      :first_name => attributes[:first_name],
-      :last_name => attributes[:last_name],
-      :passwd => attributes[:password],
-      :passwd_confirm => attributes[:password_confirmation],
-      :profile => attributes[:profile],
-      :label => attributes[:label],
-    )
-  end
-  
-  def user(attributes)
-    response_content(
-      if attributes[:username]
-        builder.v1.user(attributes[:username]).get
-      elsif attributes[:email]
-        builder.v1.user.email(attributes[:email]).get
-      else
-        raise ArgumentError.new("Expecting attributes to contain :username or :email.")
-      end,
-      :user
-    )
-  end
-  
-  def user_orders(username)
-    response_content(
-      builder.v1.user(username).orders.get,
-      :results 
-    )
-  end
-  
-  def create_order(attributes)
-    builder.v1.order.external.post(
-      :username => attributes[:username], 
-      :digital_pricing => attributes[:digital_pricing] || [], 
-      :print_pricing => attributes[:print_pricing] || [], 
-      :combo_pricing => attributes[:combo_pricing] || [],
-      :billing_address => normalize_address(attributes[:billing_address]),
-      :shipping_address => normalize_address(attributes[:shipping_address]),
-      :send_email => attributes[:send_email] ? 'true' : 'false', # FIXME???
-      :org => attributes[:org],
-      :label => attributes[:label]
-    )
-  end
-  
-  def order_refund(id, items = [], type = 'refund')
-    builder.v1.order.refund(:order_id => id, :items => items, :type => refund_type)
-  end
-  
-  def order_free(username, book_hash_id, attributes)
-    builder.v1.order.free.post(
-      :username => username, 
-      :hash_id => book_hash_id, 
-      :expiration_date => normalize_date(attributes[:expiration_date]),
-      :label => attributes[:label]
-    )
-  end
-  
-  def order_usage(id)
-    builder.v1.order(id).usage.get
-  end
-  
-  def code_generation(attributes)
-    builder.v1.codes.generate.post(
-      :hash_id => attributes[:hash_id],
-      :count => attributes[:count],
-      :org => attributes[:org],
-      :limit_days => attributes[:limit_days],
-      :expiration_date => normalize_date(attributes[:expiration_date]),
-      :samples => attributes[:samples] ? 'true' : 'false', #FIXME???
-      :label => attributes[:label]
-    )
-  end
-  
-  def code_summary
+### Invite User (Version 1)
+Create a new RedShelf user and send them an invite email with a generated password.
 
+```ruby
+RedshelfApiClient.new.invite_user(:email => 'john@example.com', :first_name => 'John', :last_name => 'Doe')
+# => {"code"=>200, "email"=>"john@example.com", "message"=>"Invitation sent.", "success"=>true, "test_mode"=>false, "username"=>{username}}
+# or
+# => {"field"=>"email", "code"=>400, "conflict"=>true, "test_mode"=>false, "error"=>true, "message"=>"User with email address already exists", "value"=>"john@example.com"}
+```
+
+### Create User (Version 1)
+Create a new RedShelf user silently.  Optional password can be omitted to generate a random password.
+
+```ruby
+RedshelfApiClient.new.create_user(:email => 'john@example.com', :first_name => 'John', :last_name => 'Doe', :password => 'abc123', :password_confirmation => 'abc123')
+# => {"username"=>{username}, "test_mode"=>false, "code"=>200, "success"=>true, "message"=>"User created.", "email"=>"john@example.com"}
+# or
+# => {"field"=>"email", "code"=>400, "conflict"=>true, "test_mode"=>false, "error"=>true, "message"=>"User with email address already exists", "value"=>"john@example.com"}
+```
+  
+### User (Version 1)
+Request user data by :username or :email
+
+```ruby
+RedshelfApiClient.new.user(:username => username)
+# => {"username"=>{username}, "status"=>{"last_login"=>"2015-04-21T22:57:19.450Z", "verified"=>false, "is_active"=>true, "over_18"=>true, "date_joined"=>"2015-04-21T22:57:19.451Z"}, "first_name"=>"John", "last_name"=>"Doe", "profile"=>{"city"=>nil, "zip"=>nil, "country"=>nil, "state"=>nil, "address_1"=>nil, "address_2"=>nil, "nickname"=>nil}, "owner"=>{"username"=>{username}, "full_name"=>"Testing"}, "email"=>"john@example.com", "permissions"=>{"html_posting"=>false, "bdp_posting"=>false, "manager"=>false, "billing_admin"=>false, "salesperson"=>false, "developer"=>false}}
+RedshelfApiClient.new.user(:email => 'john@example.com')
+# => {"username"=>{username}, "status"=>{"last_login"=>"2015-04-21T22:57:19.450Z", "verified"=>false, "is_active"=>true, "over_18"=>true, "date_joined"=>"2015-04-21T22:57:19.451Z"}, "first_name"=>"John", "last_name"=>"Doe", "profile"=>{"city"=>nil, "zip"=>nil, "country"=>nil, "state"=>nil, "address_1"=>nil, "address_2"=>nil, "nickname"=>nil}, "owner"=>{"username"=>{username}, "full_name"=>"Rafter Testing"}, "email"=>"john@example.com", "permissions"=>{"html_posting"=>false, "bdp_posting"=>false, "manager"=>false, "billing_admin"=>false, "salesperson"=>false, "developer"=>false}}
+```
+
+### User Orders (Version 1)
+Get a list of completed orders for a user.
+
+```ruby
+RedshelfApiClient.new.user_orders("15b482122a0f0c015f13d3f87ab2c0")
+# => []
+# ???
+```
+
+### Create Order (External) (Version 1)
+```ruby
+RedshelfApiClient.new.create_order(:username => username, :digital_pricing => [123], :billing_address => {:first_name => 'John', :last_name => 'Doe', :line_1 => '123 Test St.', :city => 'Davis', :state => 'CA', :postal_code => '95616'})
+# => {"message"=>"POSPlan is not currently supported.", "code"=>400, "test_mode"=>false, "error"=>true}
+# ???
+```
+  
+### Order Refund (Version 1)
+Provides a method for reporting refunds processed outside of the RedShelf system. This includes orders where the integration partner is using their own checkout and fund collection processes.
+
+The ID is the order ID returned when an order is created. Optionally a list of item IDs from the order information can be supplied for partial refunds.
+
+```ruby
+RedshelfApiClient.new.order_refund(id)
+# => ???
+RedshelfApiClient.new.order_refund(id, [1,2,3])
+# => ???
+```
+
+### Order Free (Version 1)
+Create an order for free access to a title. Attributes may include optional :expiration_date and :label
+
+```ruby
+RedshelfApiClient.new.order_free(username, book_hash_id, :expiration_date => 30.days.from_now)
+# => ???
+```
+
+### Code Generation
+
+```ruby
+RedshelfApiClient.new.code_generation(:hash_id => book_hash_id, :count => 2, :org => 'Testing', :expiration_date => 30.days.from_now, :samples => true)
+# => ???
+```
+
+### Code Summary
+
+```ruby
+RedshelfApiClient.new.code_summary
+# => ???
+```
 
 ## Copyright
 
