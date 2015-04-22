@@ -25,7 +25,7 @@ root.success?
 puts root.body
 # {
 #     "api": {
-#         "admin": "terry@virdocs.com",
+#         "admin": "example@example.com",
 #         "available_versions": [
 #             {
 #                 "version": "v1",
@@ -62,7 +62,7 @@ book.identifiers.isbn13
 ### Error responses
 In the case when the response object returns *false* for ".success?" the accessors will reflect the error response instead of the typical successful response.
 
-```
+```ruby
 book = RedshelfApiClient.new.book(:isbn => 'BAD')
 book.success?
 # => false
@@ -79,9 +79,9 @@ Return the API index which includes general information about the current status
 
 ```ruby
 response = RedshelfApiClient.new.index
-# => {"api"=>{"admin"=>"terry@virdocs.com", "available_versions"=>[{"version"=>"v1", "version_date"=>"2015-01-21", "version_help"=>"/v1/describe/", "version_major"=>1, "version_string"=>"1.0.3", "version_url"=>"/v1/"}], "current_version"=>"v1", "host"=>"volta.redshelf.com", "vhost"=>"api.redshelf.com"}, "code"=>200, "success"=>true, "test_mode"=>false}
+# => {"api"=>{"admin"=>"example@example.com", "available_versions"=>[{"version"=>"v1", "version_date"=>"2015-01-21", "version_help"=>"/v1/describe/", "version_major"=>1, "version_string"=>"1.0.3", "version_url"=>"/v1/"}], "current_version"=>"v1", "host"=>"volta.redshelf.com", "vhost"=>"api.redshelf.com"}, "code"=>200, "success"=>true, "test_mode"=>false}
 response.api.admin
-# => "terry@virdocs.com"
+# => "example@example.com"
 ```
 
 ### Profile
@@ -192,14 +192,14 @@ RedshelfApiClient.new.order_free(username, book_hash_id, :expiration_date => 30.
 # => ???
 ```
 
-### Code Generation
+### Code Generation (Version 1)
 
 ```ruby
 RedshelfApiClient.new.code_generation(:hash_id => book_hash_id, :count => 2, :org => 'Testing', :expiration_date => 30.days.from_now, :samples => true)
 # => ???
 ```
 
-### Code Summary
+### Code Summary (Version 1)
 
 ```ruby
 RedshelfApiClient.new.code_summary
