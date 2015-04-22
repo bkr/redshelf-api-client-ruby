@@ -192,14 +192,14 @@ RedshelfApiClient.new.order_free(username, book_hash_id, :expiration_date => 30.
 # => ???
 ```
 
-### Code Generation
+### Code Generation (Version 1)
 
 ```ruby
 RedshelfApiClient.new.code_generation(:hash_id => book_hash_id, :count => 2, :org => 'Testing', :expiration_date => 30.days.from_now, :samples => true)
 # => ???
 ```
 
-### Code Summary
+### Code Summary (Version 1)
 
 ```ruby
 RedshelfApiClient.new.code_summary
