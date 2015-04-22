@@ -7,7 +7,7 @@ Facilitates connection and requests to the Redshelf API.
 ```ruby
 require 'redshelf-api-client-ruby'
 
-RedshelfApiClient.configure(:username => '{username}', :pem_file => '{path_to_private_key}')
+RedshelfApiClient.configure(:username => '{username}', :pem_file => '/path/to/private_key.pem')
 ```
 
 ## Requests
