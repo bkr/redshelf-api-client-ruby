@@ -167,7 +167,7 @@ RedshelfApiClient.new.user_orders("15b482122a0f0c015f13d3f87ab2c0")
 
 ### Create Order (External) (Version 1)
 ```ruby
-RedshelfApiClient.new.create_order(:username => username, :digital_pricing => [123], :billing_address => {:first_name => 'John', :last_name => 'Doe', :line_1 => '123 Test St.', :city => 'Davis', :state => 'CA', :postal_code => '95616'})
+RedshelfApiClient.new.create_order(:username => username, :digital_pricing => [123], :billing_address => {:first_name => 'John', :last_name => 'Doe', :line_1 => '123 Test St.', :line_2 => 'Apt #42', :city => 'Davis', :state => 'CA', :postal_code => '95616'})
 # => {"message"=>"POSPlan is not currently supported.", "code"=>400, "test_mode"=>false, "error"=>true}
 # ???
 ```
