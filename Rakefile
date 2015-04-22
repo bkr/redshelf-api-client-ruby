@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "redshelf-api-client-ruby"
   gem.homepage = "http://github.com/jawheeler/redshelf-api-client-ruby"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Facilitate connection and requests to the Redshelf API.}
+  gem.description = %Q{Facilitates connection and requests to the Redshelf API, you know, for ebooks.}
   gem.email = "j.andrew.wheeler@gmail.com"
   gem.authors = ["Andrew Wheeler"]
   # dependencies defined in Gemfile
