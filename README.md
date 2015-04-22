@@ -25,7 +25,7 @@ root.success?
 puts root.body
 # {
 #     "api": {
-#         "admin": "terry@virdocs.com",
+#         "admin": "example@example.com",
 #         "available_versions": [
 #             {
 #                 "version": "v1",
