@@ -12,5 +12,5 @@ gem 'i18n'
 gem 'activemodel'
 
 group :test do
-  gem "rspec", "~> 3.2"
+  gem "rspec", "3.2"
 end

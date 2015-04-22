@@ -12,4 +12,4 @@ RSpec.configure do |config|
 
 end
 
-RedshelfApiClient.configure({:username => 'test_username', :pem_file => File.join(File.dirname(__FILE__), 'test.pem')})
+RedshelfApiClient.configure(:username => 'test_username', :pem_file => File.join(File.dirname(__FILE__), 'test.pem'), :request_per_page => 2)

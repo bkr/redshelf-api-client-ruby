@@ -53,4 +53,4 @@ DEPENDENCIES
   activesupport
   i18n
   rest-client
-  rspec (~> 3.2)
+  rspec (= 3.2)
