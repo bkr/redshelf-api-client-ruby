@@ -18,7 +18,7 @@ class RedshelfApiClient
         elsif attrubutes[:sku]
           builder.v1.book("sku/#{attributes[:sku]}").get
         else
-          raise ArgumentError.new("Expected attributes to contain :hash_id, :isbn, or :sky")
+          raise ArgumentError.new("Expected attributes to contain :hash_id, :isbn, or :sku")
         end,
         :book
       )
