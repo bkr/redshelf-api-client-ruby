@@ -93,7 +93,7 @@ class RedshelfApiClient
     end
   
     def create_order(attributes)
-      builder.v1.order.external.post(
+      builder.v1.order("external").post(
         :username => attributes[:username], 
         :digital_pricing => attributes[:digital_pricing] || [], 
         :print_pricing => attributes[:print_pricing] || [], 
@@ -107,11 +107,11 @@ class RedshelfApiClient
     end
   
     def order_refund(id, items = [], type = 'refund')
-      builder.v1.order.refund(:order_id => id, :items => items, :type => refund_type)
+      builder.v1.order.refund.post(:order_id => id, :items => items, :type => refund_type)
     end
   
     def order_free(username, book_hash_id, attributes = {})
-      builder.v1.order.free.post(
+      builder.v1.order("free").post(
         :username => username, 
         :hash_id => book_hash_id, 
         :expiration_date => normalize_date(attributes[:expiration_date]),
@@ -124,7 +124,7 @@ class RedshelfApiClient
     end
   
     def code_generation(hash_id, count, attributes = {})
-      builder.v1.codes.generate.post(
+      builder.v1.codes("generate").post(
         :hash_id => hash_id,
         :count => count.to_i,
         :org => attributes[:org],
@@ -136,7 +136,7 @@ class RedshelfApiClient
     end
   
     def code_summary
-      builder.v1.codes.summary.get
+      builder.v1.codes("summary").get
     end
   end
   
