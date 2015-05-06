@@ -192,6 +192,30 @@ RedshelfApiClient.new.order_free(username, book_hash_id, :expiration_date => 30.
 # => ???
 ```
 
+### Allow Access (Version 1; Access API)
+Allow a user to access a title. A successful request will allow book_viewer to succeed. The provider_external_price_cents should be the cost to you, provided by the publisher, in cents.
+
+```ruby
+RedshelfApiClient.new.allow_access(username, book_hash_id, provider_external_price_cents)
+# => ???
+```
+
+### Revoke Access (Version 1; Access API)
+Undo a successful call to allow_access, preventing further viewing of the title using book_viewer.
+
+```ruby
+RedshelfApiClient.new.revoke_access(username, book_hash_id)
+# => ???
+```
+
+### Order Free (Version 1)
+Create an order for free access to a title. Attributes may include optional :expiration_date and :label
+
+```ruby
+RedshelfApiClient.new.order_free(username, book_hash_id, :expiration_date => 30.days.from_now)
+# => ???
+```
+
 ### Code Generation (Version 1)
 
 ```ruby

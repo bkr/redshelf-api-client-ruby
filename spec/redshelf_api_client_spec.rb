@@ -138,7 +138,38 @@ describe "RedshelfApiClient" do
       end
     end
     
+    describe "#allow_access" do
+      let(:response_hash) {
+        {
+         'code' => 200,
+         'success' => true,
+         'test_mode' => false
+        }
+      }
+      
+      subject { client.allow_access('iamfake', 'fb02181f26270f72e261de20f8aadb9096f40802', 1234) }
+      
+      it 'returns an access object' do
+        expect(subject).to be_a(RedshelfApiClient::ResponseClasses::Access)
+      end
+    end
     
+    describe "#revoke_access" do
+      let(:response_hash) {
+        {
+         'code' => 200,
+         'success' => true,
+         'test_mode' => false
+        }
+      }
+      
+      subject { client.revoke_access('iamfake', 'fb02181f26270f72e261de20f8aadb9096f40802') }
+      
+      it 'returns an access object' do
+        expect(subject).to be_a(RedshelfApiClient::ResponseClasses::Access)
+      end
+    
+    end
   end
   
   context "multiple requests" do
@@ -200,6 +231,64 @@ describe "RedshelfApiClient" do
       end
     end
   
+  end
+  
+  describe "Normalization" do
+    describe "normalize_price" do
+      
+      subject { client.normalize_price(price) }
+      
+      context "price in cents integer" do
+        let(:price) { 1201 }
+        
+        it "should return the price as dollars string" do
+          expect(subject).to eq("12.01")
+        end
+      end
+      
+      context "price in cents string" do
+        let(:price) { '1200' }
+        
+        it "should return the price as dollars string" do
+          expect(subject).to eq("12.00")
+        end
+      end
+      
+      context "price in dollars string" do
+        let(:price) { '12.01' }
+        
+        it "should return the price as dollars string" do
+          expect(subject).to eq("12.01")
+        end
+      end
+      
+      context "small prices" do
+        context "price in cents integer" do
+          let(:price) { 1 }
+        
+          it "should return the price as dollars string" do
+            expect(subject).to eq("0.01")
+          end
+        end
+      
+        context "price in cents string" do
+          let(:price) { '1' }
+        
+          it "should return the price as dollars string" do
+            expect(subject).to eq("0.01")
+          end
+        end
+      
+        context "price in dollars string" do
+          let(:price) { '0.01' }
+        
+          it "should return the price as dollars string" do
+            expect(subject).to eq("0.01")
+          end
+        end
+      end
+      
+    end
   end
 
 end

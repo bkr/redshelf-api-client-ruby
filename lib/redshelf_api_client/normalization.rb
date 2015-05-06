@@ -21,6 +21,11 @@ class RedshelfApiClient
       Time.parse(date.to_s).strftime("%F %T") #FIXME???
     end
     
+    def normalize_price(cents)
+      string_cents = cents.to_s.sub(/\D/, '')
+      sprintf("%0.2f", string_cents.to_i/100.0)
+    end
+    
   end
   
   include Normalization

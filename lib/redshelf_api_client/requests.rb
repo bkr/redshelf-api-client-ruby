@@ -118,6 +118,21 @@ class RedshelfApiClient
         :label => attributes[:label]
       )
     end
+    
+    def allow_access(username, book_hash_id, provider_external_price_cents)
+      builder.v1.access("allow").post(
+        :hash_id => book_hash_id,
+        :username => username,
+        :price => normalize_price(provider_external_price_cents)
+      )
+    end
+    
+    def revoke_access(username, book_hash_id)
+      builder.v1.access("revoke").post(
+        :hash_id => book_hash_id,
+        :username => username
+      )
+    end
   
     def order_usage(id)
       builder.v1.order(id).usage.get
