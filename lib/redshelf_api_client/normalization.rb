@@ -4,6 +4,7 @@ class RedshelfApiClient
   module Normalization
 
     def normalize_address(address)
+      return nil if address.nil? || address.blank?
       {
         :first_name => address[:first_name], 
         :last_name => address[:last_name], 
@@ -13,7 +14,6 @@ class RedshelfApiClient
         :state => address[:state], 
         :postal_code => address[:postal_code]
       }
-      address.nil? ? {} : address
     end
   
     def normalize_date(date)

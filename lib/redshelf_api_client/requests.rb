@@ -95,13 +95,15 @@ class RedshelfApiClient
     def create_order(attributes)
       builder.v1.order("external").post(
         :username => attributes[:username], 
+        :organization_code => attributes[:organization_code] || [],
         :digital_pricing => attributes[:digital_pricing] || [], 
         :print_pricing => attributes[:print_pricing] || [], 
         :combo_pricing => attributes[:combo_pricing] || [],
         :billing_address => normalize_address(attributes[:billing_address]),
         :shipping_address => normalize_address(attributes[:shipping_address]),
         :send_email => attributes[:send_email] ? 'true' : 'false', # FIXME???
-        :org => attributes[:org],
+        :order_type => attributes[:order_type] || [],
+        :org => attributes[:org] || [],
         :label => attributes[:label]
       )
     end
@@ -153,6 +155,17 @@ class RedshelfApiClient
     def code_summary
       builder.v1.codes("summary").get
     end
+    
+    def catalogue_delta(datetime)
+      adjusted_datetime = Time.parse(datetime.to_s).
+        in_time_zone("Eastern Time (US & Canada)").
+        strftime("%Y-%m-%d %H:%M")
+        
+      builder.v1.catalogue("delta").post(
+        :start_datetime => adjusted_datetime
+      )
+    end
+      
   end
   
   include Requests
