@@ -156,6 +156,12 @@ class RedshelfApiClient
       builder.v1.codes("summary").get
     end
     
+    def catalogue(date)
+      builder.v1.catalogue.post(
+      :date => date
+      )
+    end
+    
     def catalogue_delta(datetime)
       adjusted_datetime = Time.parse(datetime.to_s).
         in_time_zone("Eastern Time (US & Canada)").
