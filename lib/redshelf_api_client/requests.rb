@@ -109,7 +109,7 @@ class RedshelfApiClient
     end
   
     def order_refund(id, items = [], type = 'refund')
-      builder.v1.order.refund.post(:order_id => id, :items => items, :type => refund_type)
+      builder.v1.order.refund.post(:order_id => id, :items => items, :type => type)
     end
   
     def order_free(username, book_hash_id, attributes = {})
