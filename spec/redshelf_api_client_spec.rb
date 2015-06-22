@@ -78,8 +78,7 @@ describe "RedshelfApiClient" do
       subject do
         client.create_order(
           :username => '166096907a7c6a18213061814e7ef4', 
-          :digital_pricing => 226541, 
-          :book_hash_id => '19d58115758d79b90261fca83ce1b0c3094a9f71', 
+          :digital_pricing => 226541,
           :org => 'RAFTERTEST',
           :order_type => 'TestPlan',
           :billing_address => {
