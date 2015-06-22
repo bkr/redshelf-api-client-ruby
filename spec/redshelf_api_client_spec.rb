@@ -70,8 +70,39 @@ describe "RedshelfApiClient" do
       end
     end
     
+    describe '#create_order' do
+      let(:response_hash) {
+        {"code"=>200, "message"=>"Order created.", "order"=>{"id"=>85457, "is_complete"=>true, "item_count"=>1, "items"=>[{"book"=>{"hash_id"=>"19d58115758d79b90261fca83ce1b0c3094a9f71", "title"=>"Introduction To RedShelf"}, "digital_pricing"=>{"description"=>" Rent eBook (120 days)", "id"=>226541}, "expiration_date"=>"2015-10-11T00:37:56.106Z", "id"=>112141, "is_active"=>true, "is_digital"=>true, "is_print"=>false, "is_refunded"=>false, "order"=>{"id"=>85457}, "purchase_date"=>"2015-06-13T00:37:56.107Z", "purchase_price"=>"11.99", "quantity"=>1, "refund_available"=>true, "user"=>{"full_name"=>"Kevin Spacey", "username"=>"166096907a7c6a18213061814e7ef4"}}], "totals"=>{"discount"=>"0.00", "processing_fee"=>"0.71", "shipping_fee"=>"0.00", "subtotal"=>"11.99", "taxes"=>"0.00", "total"=>"12.70"}, "username"=>"166096907a7c6a18213061814e7ef4"}, "success"=>true, "test_mode"=>false}
+      }
+      
+      subject do
+        client.create_order(
+          :username => '166096907a7c6a18213061814e7ef4', 
+          :digital_pricing => 226541, 
+          :book_hash_id => '19d58115758d79b90261fca83ce1b0c3094a9f71', 
+          :org => 'RAFTERTEST',
+          :order_type => 'TestPlan',
+          :billing_address => {
+            :full_name => 'Rafter, Inc.',
+            :line1 => '1200 Park Place',
+            :line2 => 'Suite 250',
+            :city => 'San Mateo',
+            :state => 'CA',
+            :postal_code => '94403',
+            :country => 'US'
+          }
+        )
+      end
+      
+      it 'returns an order object' do
+        expect(subject).to be_a(RedshelfApiClient::ResponseClasses::Order)
+        expect(subject.id).to eq(85457)
+      end
+    
+    end
+    
     describe '#book_viewer' do
-      #TODO
+      
     end
     
     describe '#invite_user' do

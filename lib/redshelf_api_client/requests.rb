@@ -93,18 +93,20 @@ class RedshelfApiClient
     end
   
     def create_order(attributes)
-      builder.v1.order("external").post(
-        :username => attributes[:username], 
-        :organization_code => attributes[:organization_code] || [],
-        :digital_pricing => attributes[:digital_pricing] || [], 
-        :print_pricing => attributes[:print_pricing] || [], 
-        :combo_pricing => attributes[:combo_pricing] || [],
-        :billing_address => normalize_address(attributes[:billing_address]),
-        :shipping_address => normalize_address(attributes[:shipping_address]),
-        :send_email => attributes[:send_email] ? 'true' : 'false', # FIXME???
-        :order_type => attributes[:order_type] || [],
-        :org => attributes[:org] || [],
-        :label => attributes[:label]
+      response_content(
+        builder.v1.order("external").post(
+          :username => attributes[:username],
+          :digital_pricing => Array(attributes[:digital_pricing]) || [], 
+          :print_pricing => Array(attributes[:print_pricing]) || [], 
+          :combo_pricing => Array(attributes[:combo_pricing]) || [],
+          :billing_address => normalize_address(attributes[:billing_address]),
+          :shipping_address => normalize_address(attributes[:shipping_address]),
+          :send_email => attributes[:send_email] ? 'true' : 'false', # FIXME???
+          :order_type => attributes[:order_type] || '',
+          :org => attributes[:org] || '',
+          :label => attributes[:label]
+        ),
+        :order
       )
     end
   
