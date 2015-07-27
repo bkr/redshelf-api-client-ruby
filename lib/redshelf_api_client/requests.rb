@@ -104,7 +104,8 @@ class RedshelfApiClient
           :send_email => attributes[:send_email] ? 'true' : 'false', # FIXME???
           :order_type => attributes[:order_type] || '',
           :org => attributes[:org] || '',
-          :label => attributes[:label]
+          :label => attributes[:label],
+          :order_number => attributes[:order_number] || ''
         ),
         :order
       )
