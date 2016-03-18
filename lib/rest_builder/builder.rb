@@ -41,7 +41,7 @@ module RestBuilder
   
     def url
       out = [domain, url_components].flatten.compact.join("/")
-      out += "?#{params.map { |k,v| "#{k}=#{v}" }.join("&")}" unless params.blank?
+      out += "?#{params.to_query}" unless params.blank?
       out
     end
       
