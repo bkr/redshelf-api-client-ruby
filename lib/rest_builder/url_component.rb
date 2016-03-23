@@ -13,7 +13,7 @@ module RestBuilder
     end
     
     def class_name
-      @folder.to_s.singularize.camelize
+      @folder.to_s.underscore.singularize.camelize
     end
   end
   

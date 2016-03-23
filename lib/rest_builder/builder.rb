@@ -34,6 +34,10 @@ module RestBuilder
     end
 
     def method_missing(name, *args, &block)
+      self[name, *args]
+    end
+
+    def [](name, *args)
       out = dup
       out.url_components << UrlComponent.new(name, *args)
       out
